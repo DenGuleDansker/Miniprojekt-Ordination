@@ -153,7 +153,7 @@ public class DataService
 
         db.SaveChanges();
 
-        return null!;
+        return dagligFast;
     }
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato) {
