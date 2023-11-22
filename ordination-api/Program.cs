@@ -6,7 +6,6 @@ using shared.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSwaggerGen();
 
 // Sætter CORS så API'en kan bruges fra andre domæner
 var AllowCors = "_AllowCors";
@@ -29,12 +28,6 @@ builder.Services.AddDbContext<OrdinationContext>(options =>
 builder.Services.AddScoped<DataService>();
 
 var app = builder.Build();
-
-app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Blazor API V1");
-});
 
 // Seed data hvis nødvendigt.
 using (var scope = app.Services.CreateScope())
