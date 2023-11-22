@@ -137,7 +137,7 @@ public class DataService
 
         patient.ordinationer.Add(pn);
         db.SaveChanges();
-        return null!;
+        return pn;
     }
 
     public DagligFast OpretDagligFast(int patientId, int laegemiddelId, 
@@ -149,7 +149,7 @@ public class DataService
 
         DagligFast dagligFast = new DagligFast(startDato, slutDato, laegemiddel, antalMorgen, antalMiddag, antalAften, antalNat);
 
-        patient.ordinationer.Add(dagligFast);
+       patient.ordinationer.Add(dagligFast);
 
         db.SaveChanges();
 
