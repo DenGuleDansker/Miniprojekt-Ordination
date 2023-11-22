@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-
 using Service;
 using Data;
+using Swashbuckle;
 using shared.Model;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSwaggerGen();
 
 // Sætter CORS så API'en kan bruges fra andre domæner
 var AllowCors = "_AllowCors";
@@ -17,6 +19,8 @@ builder.Services.AddCors(options =>
     });
 });
 
+
+
 // Tilføj DbContext factory som service.
 builder.Services.AddDbContext<OrdinationContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("ContextSQLite")));
@@ -25,6 +29,12 @@ builder.Services.AddDbContext<OrdinationContext>(options =>
 builder.Services.AddScoped<DataService>();
 
 var app = builder.Build();
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Blazor API V1");
+});
 
 // Seed data hvis nødvendigt.
 using (var scope = app.Services.CreateScope())
@@ -35,6 +45,7 @@ using (var scope = app.Services.CreateScope())
 
 app.UseHttpsRedirection();
 app.UseCors(AllowCors);
+
 
 // Middlware der kører før hver request. Sætter ContentType for alle responses til "JSON".
 app.Use(async (context, next) =>
