@@ -131,7 +131,9 @@ public class DataService
     }
 
     public PN OpretPN(int patientId, int laegemiddelId, double antal, DateTime startDato, DateTime slutDato) {
-        // TODO: Implement!
+        Patient patient = db.Patienter.FirstOrDefault(o => o.PatientId == patientId); 
+        Ordination ordination = db.Laegemiddler.First(o => o.LaegemiddelId == laegemiddelId);
+        
         return null!;
     }
 
