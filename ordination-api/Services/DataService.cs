@@ -130,6 +130,12 @@ public class DataService
         return db.Laegemiddler.ToList();
     }
 
+    public List<DagligSkæv> GetDoses()
+    {
+        return db.DagligSkæve.Include(p => p.doser).ToList();
+    }
+
+
     public PN OpretPN(int patientId, int laegemiddelId, double antal, DateTime startDato, DateTime slutDato) {
     Patient patient = db.Patienter.Find(patientId);
     Laegemiddel laegemiddel = db.Laegemiddler.Find(laegemiddelId);
@@ -157,8 +163,18 @@ public class DataService
     }
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato) {
-        // TODO: Implement!
-        return null!;
+
+        Patient patient = db.Patienter.Find(patientId);
+        Laegemiddel laegemiddel = db.Laegemiddler.Find(laegemiddelId);
+        DagligSkæv dose = db.DagligSkæve.Find(doser);
+
+        DagligSkæv dagligSkæv = new DagligSkæv(startDato, slutDato, laegemiddel, doser);
+
+        patient.ordinationer.Add(dagligSkæv);
+
+        db.SaveChanges();
+
+        return dagligSkæv;
     }
 
     public string AnvendOrdination(int id, Dato dato) {
