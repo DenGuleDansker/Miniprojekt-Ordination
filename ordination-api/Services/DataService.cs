@@ -166,7 +166,6 @@ public class DataService
 
         Patient patient = db.Patienter.Find(patientId);
         Laegemiddel laegemiddel = db.Laegemiddler.Find(laegemiddelId);
-        DagligSkæv dose = db.DagligSkæve.Find(doser);
 
         DagligSkæv dagligSkæv = new DagligSkæv(startDato, slutDato, laegemiddel, doser);
 
@@ -178,7 +177,7 @@ public class DataService
     }
 
     public string AnvendOrdination(int id, Dato dato) {
-        // TODO: Implement!
+        // hvad id skal vi matche her? id'et på PN'en?
         return null!;
     }
 
