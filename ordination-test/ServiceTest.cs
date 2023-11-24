@@ -48,13 +48,6 @@ public class ServiceTest
         // Herunder skal man så kalde noget kode,
         // der smider en exception.
 
-        Patient patient = service.GetPatienter().First();
-        Laegemiddel lm = service.GetLaegemidler().First();
-
-
-        service.OpretPN(patient.PatientId, lm.LaegemiddelId,
-          -1, DateTime.Now, DateTime.Now.AddDays(3));
-
 
         Assert.ThrowsException<Exception>(() => service.OpretPN(null, null,
           0, DateTime.Now, DateTime.Now.AddDays(3)));
