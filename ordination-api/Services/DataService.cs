@@ -188,8 +188,13 @@ public class DataService
     }
 
     public string AnvendOrdination(int id, Dato dato) {
-        // hvad id skal vi matche her? id'et på PN'en?
-        return null!;
+        PN AO = db.PNs.FirstOrDefault(p => p.OrdinationId == id);
+
+        AO.dates.Add(dato);
+
+        db.SaveChanges();
+
+        return "Ordinationen anvendt";
     }
 
     /// <summary>

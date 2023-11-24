@@ -29,6 +29,7 @@ builder.Services.AddScoped<DataService>();
 
 var app = builder.Build();
 
+
 // Seed data hvis nødvendigt.
 using (var scope = app.Services.CreateScope())
 {
