@@ -136,15 +136,26 @@ public class DataService
     }
 
 
-    public PN OpretPN(int patientId, int laegemiddelId, double antal, DateTime startDato, DateTime slutDato) {
-    Patient patient = db.Patienter.Find(patientId);
-    Laegemiddel laegemiddel = db.Laegemiddler.Find(laegemiddelId);
-    PN pn = new PN(startDato, slutDato, antal, laegemiddel);
+    public PN OpretPN(int? patientId, int? laegemiddelId, double antal, DateTime startDato, DateTime slutDato)
+    {
+        try
+        {
+            Patient patient = db.Patienter.Find(patientId);
+            Laegemiddel laegemiddel = db.Laegemiddler.Find(laegemiddelId);
 
-        patient.ordinationer.Add(pn);
-        db.SaveChanges();
-        return pn;
+            PN pn = new PN(startDato, slutDato, antal, laegemiddel);
+            patient.ordinationer.Add(pn);
+
+            db.SaveChanges();
+
+            return pn;
+        }
+            catch (Exception ex)
+        {
+            throw new Exception("Fejl under oprettelse af PN", ex);
+        }
     }
+
 
     public DagligFast OpretDagligFast(int patientId, int laegemiddelId, 
         double antalMorgen, double antalMiddag, double antalAften, double antalNat, 
