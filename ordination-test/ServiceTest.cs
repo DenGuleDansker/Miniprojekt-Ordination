@@ -36,17 +36,29 @@ public class ServiceTest
         Assert.AreEqual(1, service.GetDagligFaste().Count());
 
         service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId,
-            2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
+            0, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
 
         Assert.AreEqual(2, service.GetDagligFaste().Count());
     }
 
+
     [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
     public void TestAtKodenSmiderEnException()
     {
         // Herunder skal man så kalde noget kode,
         // der smider en exception.
+
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+
+
+        service.OpretPN(patient.PatientId, lm.LaegemiddelId,
+          -1, DateTime.Now, DateTime.Now.AddDays(3));
+
+
+        Assert.ThrowsException<Exception>(() => service.OpretPN(null, null,
+          0, DateTime.Now, DateTime.Now.AddDays(3)));
+
 
         // Hvis koden _ikke_ smider en exception,
         // så fejler testen.
