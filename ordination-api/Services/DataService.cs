@@ -187,14 +187,21 @@ public class DataService
         return dagligSkæv;
     }
 
+    //Hvis anvendordination er indenfor tidspunktet, så er dosis givet, ellers returnerer den false:
     public string AnvendOrdination(int id, Dato dato) {
         PN AO = db.PNs.FirstOrDefault(p => p.OrdinationId == id);
 
-        AO.dates.Add(dato);
+        bool DosisGivet = AO.givDosis(dato);
+        if (DosisGivet)
+        {
+            db.SaveChanges();
 
-        db.SaveChanges();
+            return "Dosis er givet";
+        }
 
-        return "Ordinationen anvendt";
+        return "Dosis er ikke givet";
+
+
     }
 
     /// <summary>
