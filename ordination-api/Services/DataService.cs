@@ -211,6 +211,7 @@ public class DataService
     /// <param name="patient"></param>
     /// <param name="laegemiddel"></param>
     /// <returns></returns>
+    /// Lavet
     public double GetAnbefaletDosisPerDøgn(int patientId, int laegemiddelId)
     {
         Patient patient = db.Patienter.Find(patientId);
