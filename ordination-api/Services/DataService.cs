@@ -138,11 +138,25 @@ public class DataService
 
     public PN OpretPN(int? patientId, int? laegemiddelId, double antal, DateTime startDato, DateTime slutDato)
     {
+
+        Patient patient2 = db.Patienter.Find(patientId);
+        Laegemiddel laegemiddel2 = db.Laegemiddler.Find(laegemiddelId);
+
+        if (patient2 == null || laegemiddel2 == null)
+        {
+            throw new ArgumentNullException("Fejl ved nulltest");
+        }
+
+        Console.WriteLine("Opret PN");
         try
         {
+            Console.WriteLine("Try");
             Patient patient = db.Patienter.Find(patientId);
+            Console.WriteLine("Patient fundet");
             Laegemiddel laegemiddel = db.Laegemiddler.Find(laegemiddelId);
 
+            Console.WriteLine("Lægemiddel fundet");
+            
             PN pn = new PN(startDato, slutDato, antal, laegemiddel);
             patient.ordinationer.Add(pn);
 
@@ -152,7 +166,7 @@ public class DataService
         }
             catch (Exception ex)
         {
-            throw new Exception("Fejl under oprettelse af PN", ex);
+            throw new ArgumentNullException("Fejl under oprettelse af PN", ex);
         }
     }
 
