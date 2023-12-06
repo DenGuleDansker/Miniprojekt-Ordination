@@ -22,7 +22,7 @@ public abstract class Ordination {
     /// </summary>
     public int antalDage() {
         // TODO: Implement!
-        return -1;
+        return ((int)(slutDen - startDen).TotalDays);
     }
 
     public override String ToString() {
