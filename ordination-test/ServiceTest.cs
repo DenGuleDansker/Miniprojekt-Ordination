@@ -36,7 +36,7 @@ public class ServiceTest
         Assert.AreEqual(1, service.GetDagligFaste().Count());
 
         service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId,
-            0, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
+            2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
 
         Assert.AreEqual(2, service.GetDagligFaste().Count());
     }

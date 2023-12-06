@@ -163,6 +163,11 @@ public class DataService
             db.SaveChanges();
 
             return pn;
+            }
+            else
+            {
+                throw new Exception("Fejl");
+            }
         }
             catch (Exception ex)
         {
@@ -175,6 +180,9 @@ public class DataService
         double antalMorgen, double antalMiddag, double antalAften, double antalNat, 
         DateTime startDato, DateTime slutDato) {
 
+        if (antalMorgen >= 0 && antalMiddag >= 0 && antalAften >= 0 && antalNat >= 0 )
+        {
+
         Patient patient = db.Patienter.Find(patientId);
         Laegemiddel laegemiddel = db.Laegemiddler.Find(laegemiddelId);
 
@@ -185,10 +193,19 @@ public class DataService
         db.SaveChanges();
 
         return dagligFast;
+        }
+        else
+        {
+            throw new Exception("Fejl"); 
+        }
     }
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato) {
 
+
+
+        if (doser != null)
+        {
         Patient patient = db.Patienter.Find(patientId);
         Laegemiddel laegemiddel = db.Laegemiddler.Find(laegemiddelId);
 
@@ -199,6 +216,11 @@ public class DataService
         db.SaveChanges();
 
         return dagligSkæv;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     //Hvis anvendordination er indenfor tidspunktet, så er dosis givet, ellers returnerer den false:
@@ -231,7 +253,7 @@ public class DataService
         Patient patient = db.Patienter.Find(patientId);
         Laegemiddel laegemiddel = db.Laegemiddler.Find(laegemiddelId);
 
-        double anbefaletDosis = -1;
+        double anbefaletDosis = 0;
 
         //Let vægt anbefalet
         if (patient != null && laegemiddel != null && patient.vaegt < 25)
