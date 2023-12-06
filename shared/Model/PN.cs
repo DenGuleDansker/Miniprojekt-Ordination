@@ -30,8 +30,8 @@ public class PN : Ordination {
     }
 
     public override double doegnDosis() {
-    	// TODO: Implement!
-        return -1;
+        // Manger test!
+        return (getAntalGangeGivet() * antalEnheder / ((int)(slutDen - startDen).TotalDays));
     }
 
 
