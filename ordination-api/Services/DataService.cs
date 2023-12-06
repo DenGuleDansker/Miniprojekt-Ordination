@@ -163,11 +163,6 @@ public class DataService
             db.SaveChanges();
 
             return pn;
-            }
-            else
-            {
-                throw new Exception("Fejl");
-            }
         }
             catch (Exception ex)
         {
@@ -176,51 +171,58 @@ public class DataService
     }
 
 
-    public DagligFast OpretDagligFast(int patientId, int laegemiddelId, 
-        double antalMorgen, double antalMiddag, double antalAften, double antalNat, 
+    public DagligFast OpretDagligFast(int patientId, int laegemiddelId,
+        double antalMorgen, double antalMiddag, double antalAften, double antalNat,
         DateTime startDato, DateTime slutDato) {
 
-        if (antalMorgen >= 0 && antalMiddag >= 0 && antalAften >= 0 && antalNat >= 0 )
+        try
         {
+            if (antalMorgen >= 0 && antalMiddag >= 0 && antalAften >= 0 && antalNat >= 0)
+            {
 
-        Patient patient = db.Patienter.Find(patientId);
-        Laegemiddel laegemiddel = db.Laegemiddler.Find(laegemiddelId);
+                Patient patient = db.Patienter.Find(patientId);
+                Laegemiddel laegemiddel = db.Laegemiddler.Find(laegemiddelId);
 
-        DagligFast dagligFast = new DagligFast(startDato, slutDato, laegemiddel, antalMorgen, antalMiddag, antalAften, antalNat);
+                DagligFast dagligFast = new DagligFast(startDato, slutDato, laegemiddel, antalMorgen, antalMiddag, antalAften, antalNat);
 
-       patient.ordinationer.Add(dagligFast);
+                patient.ordinationer.Add(dagligFast);
 
-        db.SaveChanges();
+                db.SaveChanges();
 
-        return dagligFast;
+                return dagligFast;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            throw new Exception("Fejl"); 
+            throw new ArgumentNullException("Fejl under oprettelse af DagligFast", ex);
+           
         }
+        return null;
     }
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato) {
 
 
 
+
+
         if (doser != null)
         {
-        Patient patient = db.Patienter.Find(patientId);
-        Laegemiddel laegemiddel = db.Laegemiddler.Find(laegemiddelId);
+            Patient patient = db.Patienter.Find(patientId);
+            Laegemiddel laegemiddel = db.Laegemiddler.Find(laegemiddelId);
 
-        DagligSkæv dagligSkæv = new DagligSkæv(startDato, slutDato, laegemiddel, doser);
+            DagligSkæv dagligSkæv = new DagligSkæv(startDato, slutDato, laegemiddel, doser);
 
-        patient.ordinationer.Add(dagligSkæv);
+            patient.ordinationer.Add(dagligSkæv);
 
-        db.SaveChanges();
+            db.SaveChanges();
 
-        return dagligSkæv;
+            return dagligSkæv;
+
         }
-        else
-        {
-            return null;
-        }
+            throw new ArgumentNullException("Fejl under oprettelse af DagligSkæv");
+     
+        
     }
 
     //Hvis anvendordination er indenfor tidspunktet, så er dosis givet, ellers returnerer den false:

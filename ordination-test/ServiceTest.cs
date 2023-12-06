@@ -15,7 +15,7 @@ public class ServiceTest
     public void SetupBeforeEachTest()
     {
         var optionsBuilder = new DbContextOptionsBuilder<OrdinationContext>();
-        optionsBuilder.UseInMemoryDatabase(databaseName: "test-database");
+        optionsBuilder.UseInMemoryDatabase(databaseName: $"test-database-{DateTime.UtcNow.Ticks}");
         var context = new OrdinationContext(optionsBuilder.Options);
         service = new DataService(context);
         service.SeedData();
@@ -42,6 +42,36 @@ public class ServiceTest
     }
 
     [TestMethod]
+    [ExpectedException(typeof(ArgumentNullException))]
+    public void OpretDagligeFastException()
+    {
+        service.OpretDagligFast(0, 1, 2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
+    }
+
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentOutOfRangeException))]
+    public void OpretDagligeSkævDatoException()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+
+        service.OpretDagligSkaev(patient.PatientId, lm.LaegemiddelId,
+           new Dosis[]
+       {
+            new Dosis(DateTime.Now, 0.5),
+        new Dosis(DateTime.Now.AddHours(1), 1),
+        new Dosis(DateTime.Now.AddHours(2), 2.5),
+        new Dosis(DateTime.Now.AddHours(3), 3),
+   }, new DateTime(2023, 12, 3), new DateTime(2023, 12, 1));
+    }
+
+
+
+
+
+
+    [TestMethod]
     public void OpretDagligSkaev()
     {
         Patient patient = service.GetPatienter().First();
@@ -59,7 +89,7 @@ public class ServiceTest
         new Dosis(DateTime.Now.AddHours(3), 3),
     }, DateTime.Now, DateTime.Now.AddDays(3));
         Assert.AreEqual(2, service.GetDagligSkæve().Count());
- 
+
 
     }
 
@@ -70,13 +100,13 @@ public class ServiceTest
         Patient patient = service.GetPatienter().First();
         Laegemiddel lm = service.GetLaegemidler().First();
 
-        Assert.AreEqual(1, service.GetPNs().Count());
+        Assert.AreEqual(4, service.GetPNs().Count());
 
         service.OpretPN(patient.PatientId, lm.LaegemiddelId,
                        0, DateTime.Now, DateTime.Now.AddDays(3));
 
-        Assert.AreEqual(2, service.GetPNs().Count());
-    }   
+        Assert.AreEqual(5, service.GetPNs().Count());
+    }
 
 
 
@@ -116,4 +146,44 @@ public class ServiceTest
 
         Console.WriteLine("Her kommer der ikke en exception. Testen fejler.");
     }
+
+
+    [TestMethod]
+    public void TestDoegnDosisDagligskaev()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+
+        service.OpretDagligSkaev(patient.PatientId, lm.LaegemiddelId,
+                       new Dosis[]
+     {
+            new Dosis(DateTime.Now, 0.5),
+        new Dosis(DateTime.Now.AddHours(1), 1),
+        new Dosis(DateTime.Now.AddHours(2), 2.5),
+        new Dosis(DateTime.Now.AddHours(3), 3),
+     }, DateTime.Now, DateTime.Now.AddDays(3));
+
+        Assert.AreEqual(7, service.GetDagligSkæve().First().doegnDosis());
+    }
+
+
+
+    [TestMethod]
+    public void AntalDageOrdinationTest()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+
+
+        service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId, 2, 2, 1, 1, new DateTime(2023, 12, 1), new DateTime(2023, 12, 5));
+
+        Assert.AreEqual(4, service.GetDagligFaste().First().antalDage());
+    }
 }
+
+
+
+
+
+
+

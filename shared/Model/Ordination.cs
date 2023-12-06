@@ -10,6 +10,11 @@ public abstract class Ordination {
     	this.startDen = startDen;
     	this.slutDen = slutDen;
         this.laegemiddel = laegemiddel;
+
+        if (startDen > slutDen)
+        {
+            throw new ArgumentOutOfRangeException("Fejl out of range");
+        }
     }
 
     public Ordination()
