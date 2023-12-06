@@ -217,7 +217,7 @@ public class DataService
         Patient patient = db.Patienter.Find(patientId);
         Laegemiddel laegemiddel = db.Laegemiddler.Find(laegemiddelId);
 
-        double anbefaletDosis = -1;
+        double anbefaletDosis = 0;
 
         //Let vægt anbefalet
         if (patient != null && laegemiddel != null && patient.vaegt < 25)
