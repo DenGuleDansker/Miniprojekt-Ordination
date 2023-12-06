@@ -45,7 +45,7 @@ public class PNTest
         //TC4 - tester om dosis kan gives inden starten af perioden.
         PN TC5 = new PN(new DateTime(2023, 11, 01), new DateTime(2023, 11, 10), 123, new Laegemiddel("Paracematol", 0.5, 0.5, 0.025, "Styk"));
 
-        bool Dosis_T5 = TC5.givDosis(new Dato { dato = new DateTime(2023, 10, 31).Date });
+        bool Dosis_T5 = TC5.givDosis(new Dato { dato = new DateTime(2023, 11, 11).Date });
 
         Assert.AreEqual(false, Dosis_T4);
     }
