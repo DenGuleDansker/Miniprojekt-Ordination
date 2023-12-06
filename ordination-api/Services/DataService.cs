@@ -140,6 +140,9 @@ public class DataService
     {
         try
         {
+            if (antal > 0)
+            {
+
             Patient patient = db.Patienter.Find(patientId);
             Laegemiddel laegemiddel = db.Laegemiddler.Find(laegemiddelId);
 
@@ -149,10 +152,15 @@ public class DataService
             db.SaveChanges();
 
             return pn;
+            }
+            else
+            {
+                throw new Exception("Fejl");
+            }
         }
             catch (Exception ex)
         {
-            throw new Exception("Fejl under oprettelse af PN", ex);
+            throw new Exception("Fejl", ex);
         }
     }
 
@@ -160,6 +168,9 @@ public class DataService
     public DagligFast OpretDagligFast(int patientId, int laegemiddelId, 
         double antalMorgen, double antalMiddag, double antalAften, double antalNat, 
         DateTime startDato, DateTime slutDato) {
+
+        if (antalMorgen >= 0 && antalMiddag >= 0 && antalAften >= 0 && antalNat >= 0 )
+        {
 
         Patient patient = db.Patienter.Find(patientId);
         Laegemiddel laegemiddel = db.Laegemiddler.Find(laegemiddelId);
@@ -171,10 +182,19 @@ public class DataService
         db.SaveChanges();
 
         return dagligFast;
+        }
+        else
+        {
+            throw new Exception("Fejl"); 
+        }
     }
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato) {
 
+
+
+        if (doser != null)
+        {
         Patient patient = db.Patienter.Find(patientId);
         Laegemiddel laegemiddel = db.Laegemiddler.Find(laegemiddelId);
 
@@ -185,6 +205,11 @@ public class DataService
         db.SaveChanges();
 
         return dagligSkæv;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     //Hvis anvendordination er indenfor tidspunktet, så er dosis givet, ellers returnerer den false:

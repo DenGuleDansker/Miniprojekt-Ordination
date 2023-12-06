@@ -36,26 +36,24 @@ public class ServiceTest
         Assert.AreEqual(1, service.GetDagligFaste().Count());
 
         service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId,
-            0, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
+            2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
 
         Assert.AreEqual(2, service.GetDagligFaste().Count());
     }
 
     [TestMethod]
-    public void OpretDagligSkæv()
+    public void OpretPN()
     {
         Patient patient = service.GetPatienter().First();
         Laegemiddel lm = service.GetLaegemidler().First();
 
-        Assert.AreEqual(1, service.GetDagligFaste().Count());
+        Assert.AreEqual(1, service.GetPNs().Count());
 
-        service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId,
-            0, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
+        service.OpretPN(patient.PatientId, lm.LaegemiddelId, 1, DateTime.Now, DateTime.Now.AddDays(3));
 
-        Assert.AreEqual(2, service.GetDagligFaste().Count());
-
-
+        Assert.AreEqual(2, service.GetPNs().Count());
     }
+
 
 
     [TestMethod]
