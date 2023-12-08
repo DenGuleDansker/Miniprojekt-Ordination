@@ -111,6 +111,8 @@ public class ServiceTest
 
 
 
+
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentNullException))]
     public void TestAtKodenSmiderEnException()
@@ -128,6 +130,69 @@ public class ServiceTest
 
         Console.WriteLine("Her kommer der ikke en exception. Testen fejler.");
     }
+
+
+    [TestMethod]
+    public void TestOpretPN_PatientID()
+    {
+        // Arrange
+        Laegemiddel lm = service.GetLaegemidler().First();
+
+        // Act
+        PN createdPN = service.OpretPN(1, lm.LaegemiddelId, 0, DateTime.Now, DateTime.Now.AddDays(3));
+
+        // Assert
+        Assert.IsNotNull(createdPN);
+        
+    }
+
+
+    [TestMethod]
+    public void TestOpretPN_Lægemiddel()
+    {
+        // Arrange
+        Patient patient = service.GetPatienter().First();
+
+        // Act
+        PN createdPN = service.OpretPN(patient.PatientId, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
+
+        // Assert
+        Assert.IsNotNull(createdPN);
+
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentNullException))]
+    public void TestOpretPN_MinusAntal()
+    {
+        // Arrange
+        Laegemiddel lm = service.GetLaegemidler().First();
+        Patient patient = service.GetPatienter().First();
+
+        // Act
+        PN createdPN = service.OpretPN(patient.PatientId, lm.LaegemiddelId, -1, DateTime.Now, DateTime.Now.AddDays(3));
+
+        // Assert
+        Assert.AreEqual(new ArgumentNullException(), createdPN.antalEnheder);
+
+    }
+
+    [TestMethod]
+    public void TestOpretPN_PlusAntal()
+    {
+        // Arrange
+        Laegemiddel lm = service.GetLaegemidler().First();
+        Patient patient = service.GetPatienter().First();
+
+        // Act
+        PN createdPN = service.OpretPN(patient.PatientId, lm.LaegemiddelId, 1, DateTime.Now, DateTime.Now.AddDays(3));
+
+        // Assert
+        Assert.IsNotNull(createdPN);
+
+    }
+
+
 
 
     [TestMethod]
@@ -166,6 +231,47 @@ public class ServiceTest
         Assert.AreEqual(7, service.GetDagligSkæve().First().doegnDosis());
     }
 
+    [TestMethod]
+    public void TestOpretDagligSkaev_PatientID()
+    {
+        // Arrange
+        Laegemiddel lm = service.GetLaegemidler().First();
+
+        // Act
+        DagligSkæv createdDagliSkaev = service.OpretDagligSkaev(1, lm.LaegemiddelId,
+                       new Dosis[]
+     {
+            new Dosis(DateTime.Now, 0.5),
+        new Dosis(DateTime.Now.AddHours(1), 1),
+        new Dosis(DateTime.Now.AddHours(2), 2.5),
+        new Dosis(DateTime.Now.AddHours(3), 3),
+     }, DateTime.Now, DateTime.Now.AddDays(3));
+
+        // Assert
+        Assert.IsNotNull(createdDagliSkaev);
+
+    }
+
+    [TestMethod]
+    public void TestOpretSkæv_Lægemiddel()
+    {
+        // Arrange
+        Patient patient = service.GetPatienter().First();
+
+        // Act
+        DagligSkæv createdDagliSkaev = service.OpretDagligSkaev(patient.PatientId, 1,
+                       new Dosis[]
+     {
+            new Dosis(DateTime.Now, 0.5),
+        new Dosis(DateTime.Now.AddHours(1), 1),
+        new Dosis(DateTime.Now.AddHours(2), 2.5),
+        new Dosis(DateTime.Now.AddHours(3), 3),
+     }, DateTime.Now, DateTime.Now.AddDays(3));
+
+        // Assert
+        Assert.IsNotNull(createdDagliSkaev);
+
+    }
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentNullException))]
@@ -202,6 +308,64 @@ public class ServiceTest
 
         Assert.AreEqual(10, test.antalDage());
         
+    }
+
+    [TestMethod]
+    public void TestOpretDagligFast_PatientID()
+    {
+        // Arrange
+        Laegemiddel lm = service.GetLaegemidler().First();
+
+        // Act
+        DagligFast createdFast = service.OpretDagligFast(1, lm.LaegemiddelId, 0, 0, 0, 0, DateTime.Now, DateTime.Now.AddDays(3));
+
+        // Assert
+        Assert.IsNotNull(createdFast);
+
+    }
+
+    [TestMethod]
+    public void TestDagligFast_Lægemiddel()
+    {
+        // Arrange
+        Patient patient = service.GetPatienter().First();
+
+        // Act
+        DagligFast createdFast = service.OpretDagligFast(patient.PatientId, 1, 0, 0, 0, 0, DateTime.Now, DateTime.Now.AddDays(3));
+
+        // Assert
+        Assert.IsNotNull(createdFast);
+
+    }
+
+    [TestMethod]
+    public void TestDagligFast_MinusAntal()
+    {
+        // Arrange
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+
+        // Act
+        DagligFast createdFast = service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId, -1, -1, -1, -1, DateTime.Now, DateTime.Now.AddDays(3));
+
+        // Assert
+        Assert.IsNull(createdFast);
+
+    }
+
+    [TestMethod]
+    public void TestDagligFast_PlusAntal()
+    {
+        // Arrange
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+
+        // Act
+        DagligFast createdFast = service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId, 1, 1, 1, 1, DateTime.Now, DateTime.Now.AddDays(3));
+
+        // Assert
+        Assert.IsNotNull(createdFast);
+
     }
 }
 
