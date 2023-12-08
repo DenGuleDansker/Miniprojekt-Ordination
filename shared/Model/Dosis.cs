@@ -10,6 +10,10 @@ public class Dosis
     {
         this.tid = tid;
         this.antal = antal;
+        if (antal < 0 )
+        {
+            throw new ArgumentNullException ($"Dosis er {antal}");
+        }
     }
 
     public Dosis()

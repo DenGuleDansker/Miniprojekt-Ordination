@@ -157,7 +157,7 @@ public class ServiceTest
         service.OpretDagligSkaev(patient.PatientId, lm.LaegemiddelId,
                        new Dosis[]
      {
-            new Dosis(DateTime.Now, 0.5),
+        new Dosis(DateTime.Now, 0.5),
         new Dosis(DateTime.Now.AddHours(1), 1),
         new Dosis(DateTime.Now.AddHours(2), 2.5),
         new Dosis(DateTime.Now.AddHours(3), 3),
@@ -167,6 +167,30 @@ public class ServiceTest
     }
 
 
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentNullException))]
+    public void TestNegativDosisDagligskaev()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+
+        service.OpretDagligSkaev(patient.PatientId, lm.LaegemiddelId,
+                       new Dosis[]
+     {
+        new Dosis(DateTime.Now, -1),
+        new Dosis(DateTime.Now.AddHours(1), 0),
+        new Dosis(DateTime.Now.AddHours(2), 0),
+        new Dosis(DateTime.Now.AddHours(3), 0),
+     }, DateTime.Now, DateTime.Now.AddDays(3));
+
+        Assert.AreEqual(new ArgumentNullException(), service.GetDagligSkæve().First().doegnDosis());
+    }
+
+
+
+
+
+
 
     [TestMethod]
     public void AntalDageOrdinationTest()
@@ -174,10 +198,10 @@ public class ServiceTest
         Patient patient = service.GetPatienter().First();
         Laegemiddel lm = service.GetLaegemidler().First();
 
+        var test = service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId, 2, 2, 1, 1, new DateTime(2023, 12, 1), new DateTime(2023, 12, 10));
 
-        service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId, 2, 2, 1, 1, new DateTime(2023, 12, 1), new DateTime(2023, 12, 5));
-
-        Assert.AreEqual(4, service.GetDagligFaste().First().antalDage());
+        Assert.AreEqual(10, test.antalDage());
+        
     }
 }
 
